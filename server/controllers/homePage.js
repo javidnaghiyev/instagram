@@ -54,3 +54,15 @@ export const likePost = async (req, res) => {
 
     res.json(updatedPost)
 }
+
+export const comment = async (req, res) => {
+    const { id: _id } = req.params
+    const comment = req.body
+
+    if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('We couldn\'t find this post')
+
+    const post = await PostModel.findById(_id)
+    const updatedComment = await PostModel.findByIdAndUpdate(_id, { $push: { comments: comment.comment} }, { new: true } )
+
+    res.json(updatedComment)
+}

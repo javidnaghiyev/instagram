@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import {classes} from './styles';
 import { postsdb } from './poststdb';
-import { Container, Box, Typography, Modal, Button} from '@mui/material';
+import { Container, Box, Typography, Modal, Button, TextField} from '@mui/material';
 import { useState, useEffect } from 'react';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -10,9 +10,10 @@ import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useSelector, useDispatch } from 'react-redux'
-import { getPostID, showCreateAction, deletePost } from '../../actions/posts';
+import { getPostID, showCreateAction, deletePost, comment } from '../../actions/posts';
 import { getPosts } from '../../actions/posts';
 import * as api from '../../api/index'
 
@@ -57,6 +58,14 @@ const Post = () => {
         await api.likePost(id)
     }
 
+
+    //comment
+    const [commentData, setCommentData] = useState({comment: ""})
+
+    const commentPost = () => {
+        dispatch(comment(currentID, commentData))
+    }
+
     return <>
     {!posts.length ? <CircularProgress /> :
         <Container sx={classes.container} xs={12}>
@@ -71,24 +80,27 @@ const Post = () => {
                                             <Box component='div' sx={classes.border}></Box>
                                             <img src={post.profilePicture} />
                                         </Box>
-                                        <Typography sx={classes.accountName}>{post.name}</Typography>
+                                        <Box>
+                                            <Typography sx={classes.accountName}>audi</Typography>
+                                            <Typography sx={classes.location}>{post.location}</Typography>
+                                        </Box>
                                         <MoreHorizIcon sx={{position: 'absolute', right: '10px'}}
                                             onClick={() => RsendPostID((post._id))}
                                         ></MoreHorizIcon>
-                                        <Modal
-                                
-                                            open={open}
-                                            onClose={() => handleClose()}
-                                            aria-labelledby="child-modal-title"
-                                            aria-describedby="child-modal-description"
-                                        >
-                                            <Box sx={classes.modal}>
-                                                <Button onClick={() => editPost()}>Edit Post</Button><br />
-                                                <Button onClick={() => removePost()}>Delete Post</Button>
-                                            </Box>
+                                            <Modal
+                                    
+                                                open={open}
+                                                onClose={() => handleClose()}
+                                                aria-labelledby="child-modal-title"
+                                                aria-describedby="child-modal-description"
+                                            >
+                                                <Box sx={classes.modal}>
+                                                    <Button onClick={() => editPost()}>Edit Post</Button><br />
+                                                    <Button onClick={() => removePost()}>Delete Post</Button>
+                                                </Box>
 
 
-                                        </Modal>
+                                            </Modal>
                                     </Container>
                                 </Box>
                                 <Box component='div'>
@@ -110,10 +122,35 @@ const Post = () => {
                                         </Box>
                                     </Box>
                                 </Box>
-                                <Box>
-                                    <Typography>{post.likeCount}</Typography>
-                                    <Typography>{post.title}</Typography>
-                                    <Typography>{post.location}</Typography>
+                                <Box sx={classes.postBottom}>
+                                    <Typography>{post.likeCount} likes</Typography>
+                                    <Typography display='inline' marginRight='5px'>audi</Typography>
+                                    <Typography variant='body2' display='inline' fontWeight='300'>{post.title}</Typography>
+                                    <Box sx={classes.commentHolder}>
+                                        {post.comments.map(comment => {
+                                            return <>
+                                            <Box position='relative'>
+                                                <Typography>
+                                                    {comment}
+                                                </Typography>
+                                                <DeleteIcon sx={{position: 'absolute', right: '0'}} fontSize='sm'></DeleteIcon>
+                                            </Box>
+                                            </>
+                                        })}
+                                    </Box>
+                                </Box>
+                                <Box borderTop='1px solid rgba(0,0,0,0.1)' position='relative'>
+                                    <TextField  sx={classes.commentInput} placeholder='Add a comment...' variant='filled' size='small' name='comment' fullWidth InputProps={{disableUnderline: true}}
+                                    onClick={() => setCurrentID(post._id)}
+                                    value={commentData.comment}
+                                    onChange={(e) => setCommentData({ ...commentData, comment: e.target.value})}
+                                    >
+                                    
+                                    </TextField>
+                                    <Button 
+                                    sx={{position: 'absolute', right: '0'}} 
+                                    
+                                    onClick={() => commentPost()}>Post</Button>   
                                 </Box>
                 </Box>
             </Box>

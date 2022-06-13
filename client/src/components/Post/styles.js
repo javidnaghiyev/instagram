@@ -28,7 +28,8 @@ const classes = {
         display: 'flex',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        padding: 'none !important'
+        padding: 'none !important',
+        marginBottom: '5px'
     },
     border: {
         position: 'absolute',
@@ -58,6 +59,10 @@ const classes = {
     accountName: {
         width: 'fit-content'
     },
+    location: {
+        color: 'gray',
+        fontSize: '12px'
+    },
     imgHolder: {
         width: '614px',
         position: 'relative',
@@ -67,7 +72,6 @@ const classes = {
         width:'100%',
         objectFit: 'cover'
     },
-
     details: {
         padding: '10px !important'
     },
@@ -77,6 +81,16 @@ const classes = {
         },
         '& :nth-child(4)': {
             float: 'right'
+        }
+    },
+    postBottom: {
+        padding: '0 17px'
+    },
+    commentInput:{
+        '& input': {
+            
+            backgroundColor: 'white',
+            padding: '10px 17px'
         }
     },
     modal: {
