@@ -9,6 +9,7 @@ export default (posts = [], action) => {
         case 'UPDATE':
         case 'LIKE':
         case 'COMMENT':
+        case 'DELETE_COMMENT':
             return posts.map((post) => post._id === action.payload._id ? action.payload : post);
         default:
             return posts;

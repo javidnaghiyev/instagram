@@ -13,7 +13,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useSelector, useDispatch } from 'react-redux'
-import { getPostID, showCreateAction, deletePost, comment } from '../../actions/posts';
+import { getPostID, showCreateAction, deletePost, comment, deleteComment } from '../../actions/posts';
 import { getPosts } from '../../actions/posts';
 import * as api from '../../api/index'
 
@@ -61,10 +61,12 @@ const Post = () => {
 
     //comment
     const [commentData, setCommentData] = useState({comment: ""})
+    const [commentIndex, setCommentIndex] = useState(null)
 
     const commentPost = () => {
         dispatch(comment(currentID, commentData))
     }
+
 
     return <>
     {!posts.length ? <CircularProgress /> :
@@ -133,7 +135,7 @@ const Post = () => {
                                                 <Typography>
                                                     {comment}
                                                 </Typography>
-                                                <DeleteIcon sx={{position: 'absolute', right: '0'}} fontSize='sm'></DeleteIcon>
+                                                <DeleteIcon onClick={() => dispatch(deleteComment(post._id, comment))} sx={{position: 'absolute', right: '0', zIndex: '5'}} fontSize='sm'></DeleteIcon>
                                             </Box>
                                             </>
                                         })}

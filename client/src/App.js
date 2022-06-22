@@ -1,9 +1,11 @@
 import React from 'react';
 import Header from './components/Header/Header.js'
 import HomePage from './components/HomePage/HomePage';
-import { globalClasses } from './globalStyles';
-
+import Auth from './components/Auth/Auth'
 import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import { globalClasses } from './globalStyles';
 import { useEffect } from 'react';
 import { getPosts, likePost } from './actions/posts'
 
@@ -17,8 +19,14 @@ const App = () => {
 
   return (
     <>
-    <Header></Header>
-    <HomePage sx={globalClasses.homePage}></HomePage>
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path='/' exact component={HomePage}/>
+        <Route path='/auth' exact component={Auth} />
+      </Routes>
+      <HomePage />
+    </BrowserRouter>
     </>
   )
 }

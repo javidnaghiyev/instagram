@@ -66,3 +66,14 @@ export const comment = async (req, res) => {
 
     res.json(updatedComment)
 }
+
+export const deleteComment = async (req, res) => {
+    const { id: _id, comment: comment } = req.params
+
+    if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('We couldn\'t find this post')
+
+    const post = PostModel.findById(_id)
+    const deletedComment = await PostModel.findByIdAndUpdate(_id, { $pull: { comments: { $in: [`${comment}`]}}}, { new : true})
+
+    res.json(deletedComment)
+}

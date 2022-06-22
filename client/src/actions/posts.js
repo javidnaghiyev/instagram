@@ -57,6 +57,15 @@ export const comment = (id, comment) => async (dispatch) => {
     }
 }
 
+export const deleteComment = (id, comment) => async (dispatch) => {
+    try{
+        const { data } = await api.deleteComment(id, comment)
+        dispatch({ type: 'DELETE_COMMENT', payload: data})
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const showCreateAction = () => ({
     type: 'TRUE',
     payload: true

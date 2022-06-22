@@ -3,8 +3,10 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import homePageRouter from './routes/homePage.js'
+import dotenv from 'dotenv'
 
 const app = express();
+dotenv.config()
 
 
 app.use(bodyParser.json({ limit: "30mb", extended: true}));
@@ -17,6 +19,6 @@ app.use('/', homePageRouter)
 const CONNECTION_URL = 'mongodb+srv://javidnaghiyev:7355608planted@cluster0.25v9n.mongodb.net/?retryWrites=true&w=majority'
 const PORT = process.env.PORT || 5000
 
-mongoose.connect(CONNECTION_URL)
+mongoose.connect(process.env.CONNECTION_URL)
     .then(() => app.listen(PORT, () => console.log(`Server started on port ${PORT}`)))
     .catch((error) => error.message);
