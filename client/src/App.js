@@ -20,12 +20,11 @@ const App = () => {
   return (
     <>
     <BrowserRouter>
-      <Header />
+      
       <Routes>
-        <Route path='/' exact component={HomePage}/>
-        <Route path='/auth' exact component={Auth} />
+        <Route exact path='/' element={<div><Header /><HomePage /></div>} />
+        <Route path='/auth' exact element={<Auth />} />
       </Routes>
-      <HomePage />
     </BrowserRouter>
     </>
   )
