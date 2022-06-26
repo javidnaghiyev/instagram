@@ -1,21 +1,33 @@
 const bgColor = '#fafafa';
+
 const classes = {
+    secondaryText: {
+        value: '#aaa'
+    },
     container: {
         position: 'absolute',
         top: '0',
         left: '0',
         padding: '0',
-        width: '100%',
         backgroundColor: bgColor,
         zIndex: '-5',
-        height: '100vh',
-        width: '100vw'
+        maxWidth: 'none !important',
+        height: '100vh'
     },
     miniContainer: {
         marginTop: '50px'
     },
-    paper: {
-        
+    lineHolder: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginBottom: '15px'
+    },
+    horizontalLine: {
+        height: '1px',
+        width: '40%',
+        backgroundColor: '#aaa',
+        top: '0.45em'
     }
 }
 
