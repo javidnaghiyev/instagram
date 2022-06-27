@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { GoogleLogin } from 'react-google-login'
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
+import jwt_decode from 'jwt-decode'
 
 import { classes } from './styles'
 import Input from './Input'
@@ -24,7 +25,8 @@ const Auth = () => {
   }
 
   const googleSuccess = async (res) => {
-    console.log(res);
+    const token = jwt_decode(res.credential)
+    console.log(token);
   }
 
   const googleFailure = (error) => {
@@ -42,17 +44,18 @@ const Auth = () => {
             {isSignup && (
               <Box>
                 <Typography textAlign='center' color={classes.secondaryText.value}>Sign up to see photos and videos from your friends.</Typography>
-                <GoogleLogin
-                  clientId='191038965379-f5id1v2hli3f09g7o07vfbavl05227b0.apps.googleusercontent.com'
-                  render={(renderProps) => (
-                    <Button variant='contained' disableRipple fullWidth sx={{margin: '15px 0'}} onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />}>Log in with Google</Button>
-                  )}
-                  onSuccess={googleSuccess}
-                  onFailure={googleFailure}
-                  cookiePolicy='single_host_origin'
-                />
-                
-
+                  <GoogleOAuthProvider clientId='191038965379-f5id1v2hli3f09g7o07vfbavl05227b0.apps.googleusercontent.com'>
+                    <GoogleLogin
+                      logo_alignment='center'
+                      theme='filled_blue'
+                      render={(renderProps) => (
+                        <Button variant='contained' disableRipple fullWidth sx={{margin: '15px 0'}} onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />}>Log in with Google</Button>
+                      )}
+                      onSuccess={googleSuccess}
+                      onFailure={googleFailure}
+                      cookiePolicy='single_host_origin'
+                    />
+                  </GoogleOAuthProvider>
                 <Box sx={classes.lineHolder}>
                   <Box component='div' sx={classes.horizontalLine}></Box>
                   <Typography color={classes.secondaryText.value}>OR</Typography>
