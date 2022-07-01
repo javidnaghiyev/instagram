@@ -7,8 +7,12 @@ import { classes } from './styles'
 import Input from './Input'
 import { Container, Avatar, Button, Paper, Grid, Typography, TextField, Box, collapseClasses } from '@mui/material'
 import Icon from './Icon'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const Auth = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [isSignup, setIsSignup] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -25,8 +29,16 @@ const Auth = () => {
   }
 
   const googleSuccess = async (res) => {
-    const token = jwt_decode(res.credential)
-    console.log(token);
+    const profileObj = jwt_decode(res.credential)
+    const result = (({ given_name, family_name, email, picture }) => ({ given_name, family_name, email, picture }))(profileObj)
+    const token = profileObj.jti
+
+    try {
+      dispatch({ type: 'AUTH', data: { result, token}})
+      navigate('/')
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const googleFailure = (error) => {

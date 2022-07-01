@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {classes} from './styles'
 import { Container, TextField, Box, Avatar, Button, Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
@@ -24,7 +24,14 @@ const Header = () => {
     window.scrollTo(0,0)
   }
 
-  const user = null
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
+
+
+  //LOGOUT
+  const logout = () => {
+    localStorage.removeItem('profile')
+    setUser(null)
+  }
 
   //Profile menu
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -50,12 +57,12 @@ const Header = () => {
         </Box>
 
         <Box sx={classes.iconsHolder}>
+              {user ? (<>
               <HomeIcon fontSize='large'></HomeIcon>
               <InboxIcon fontSize='large'></InboxIcon>
               <AddCircleOutlineIcon fontSize='large' onClick={showCreateClick}></AddCircleOutlineIcon>
               <ExploreIcon fontSize='large'></ExploreIcon>
               <FavoriteBorderIcon fontSize='large'></FavoriteBorderIcon>
-              {user ? (<>
                 <Button
                   id="basic-button"
                   aria-controls={open ? 'basic-menu' : undefined}
@@ -67,7 +74,7 @@ const Header = () => {
                       width: '30px',
                       height: '30px',
                       borderRadius: '100%'
-                  }} src="https://i1.rgstatic.net/ii/profile.image/1018933272395776-1619944031326_Q512/Javid-Naghiyev-2.jpg">C</Avatar>
+                  }} src={user.result.picture}>C</Avatar>
               
                 </Button>
                   <Menu
@@ -81,7 +88,7 @@ const Header = () => {
                   >
                   <MenuItem onClick={handleClose}>Profile</MenuItem>
                   <MenuItem onClick={handleClose}>My account</MenuItem>
-                  <MenuItem onClick={handleClose}>Logout</MenuItem>
+                  <MenuItem onClick={logout}>Logout</MenuItem>
                 </Menu>
 
               </>) : (<>
