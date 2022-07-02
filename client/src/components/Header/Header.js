@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import {classes} from './styles'
 import { Container, TextField, Box, Avatar, Button, Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import store from '../../index';
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -18,6 +18,8 @@ import getPostID from '../../reducers/getPostID';
 
 const Header = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const showCreateClick = () => {
     store.dispatch(showCreateAction())
@@ -26,10 +28,19 @@ const Header = () => {
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
 
+  useEffect(() => {
+    const token = user ? user.token : undefined
+    if(token){
+      setUser(JSON.parse(localStorage.getItem('profile')))
+    }else{
+      setUser(null)
+    }
+  }, [location])
 
   //LOGOUT
   const logout = () => {
-    localStorage.removeItem('profile')
+    dispatch({ type: 'LOGOUT' })
+    navigate('/')
     setUser(null)
   }
 

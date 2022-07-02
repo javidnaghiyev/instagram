@@ -10,15 +10,23 @@ import Icon from './Icon'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+const initialState = { firstName: '', lastName: '', email: '', password: '', confirm: ''}
+
 const Auth = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const [isSignup, setIsSignup] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [formData, setFormData] = useState(initialState)
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(formData);
+  }
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name] : e.target.value })
   }
 
   const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword)
@@ -29,9 +37,9 @@ const Auth = () => {
   }
 
   const googleSuccess = async (res) => {
-    const profileObj = jwt_decode(res.credential)
+    const profileObj = jwt_decode(res ? res.credential : undefined)
     const result = (({ given_name, family_name, email, picture }) => ({ given_name, family_name, email, picture }))(profileObj)
-    const token = profileObj.jti
+    const token = profileObj ? profileObj.jti : undefined
 
     try {
       dispatch({ type: 'AUTH', data: { result, token}})
@@ -52,7 +60,7 @@ const Auth = () => {
       <Container  maxWidth='xs' sx={classes.miniContainer}>
         <Paper sx={{padding: '20px'}}>
           <Box sx={{display:'block',margin:'auto', padding: '20px'}} component='img' src='https://www.instagram.com/static/images/web/logged_out_wordmark.png/7a252de00b20.png' />
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} onChange={handleChange}>
             {isSignup && (
               <Box>
                 <Typography textAlign='center' color={classes.secondaryText.value}>Sign up to see photos and videos from your friends.</Typography>
@@ -78,26 +86,22 @@ const Auth = () => {
             <Grid container spacing={2}>
               {isSignup && (
               <>
-                <Input name='firstName' label='First Name' type='text' autoFocus half/>
-                <Input name='lastName' label='Last Name' type='text' half />
+                <Input name='firstName' label='First Name' type='text' autoFocus half onChange={handleChange}/>
+                <Input name='lastName' label='Last Name' type='text' half onChange={handleChange}/>
               </> 
               )}
-              <Input name='email' label='Email' type='email'/>
-              <Input name='password' label='Password' type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword}  isSignup/>
+              <Input name='email' label='Email' type='email' onChange={handleChange}></Input>
+              <Input name='password' label='Password' type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword}  isSignup onChange={handleChange}/>
               {isSignup && (
               <>
-                <Input name='confirm' label='Confirm password' type='password' />
+                <Input name='confirm' label='Confirm password' type='password' onChange={handleChange}/>
               </>
               )}
-              {!isSignup ? (
+              
                 <Grid item xs={12}>
-                  <Button variant='contained' fullWidth>Log in</Button>
+                  <Button variant='contained' type='submit' fullWidth>{isSignup ? 'Sign Up' : 'Log In'}</Button>
                 </Grid>
-              ) : (
-                <Grid item xs={12}>
-                  <Button variant='contained' fullWidth>Sign up</Button>
-                </Grid>
-              )}
+             
             </Grid>
           </form>
         </Paper>
