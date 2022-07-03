@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 import jwt_decode from 'jwt-decode'
 
@@ -9,6 +8,7 @@ import { Container, Avatar, Button, Paper, Grid, Typography, TextField, Box, col
 import Icon from './Icon'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { signin, signup } from '../../actions/auth'
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirm: ''}
 
@@ -22,7 +22,11 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(formData);
+    if(isSignup){
+      dispatch(signup())
+    }else{
+      dispatch(signin())
+    }
   }
 
   const handleChange = (e) => {
