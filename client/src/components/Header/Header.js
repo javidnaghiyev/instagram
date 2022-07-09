@@ -40,7 +40,7 @@ const Header = () => {
   //LOGOUT
   const logout = () => {
     dispatch({ type: 'LOGOUT' })
-    navigate('/')
+    navigate('/auth')
     setUser(null)
   }
 
@@ -85,7 +85,7 @@ const Header = () => {
                       width: '30px',
                       height: '30px',
                       borderRadius: '100%'
-                  }} src={user.result.picture}>C</Avatar>
+                  }} src={user.result.picture}>{user.result.picture || user.result.firstName.charAt(0)}</Avatar>
               
                 </Button>
                   <Menu

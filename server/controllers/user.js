@@ -23,11 +23,12 @@ export const signup = async (req, res) => {
         const existingUser = await UserModel.findOne({email})
         if(existingUser) return res.status(400).json({ message: 'This user already exists'})
         if(password != confirm) return res.status(400).json({message: 'Passwords don\'t match'})
-        const hashedPassword = bcrypt(password, 12)
+        const hashedPassword = await bcrypt.hash(password, 12)
         const result = await UserModel.create({firstName, lastName, email, password: hashedPassword})
         const token = jwt.sign({email: result.email, id: result._id}, process.env.SECRET, {expiresIn: '1h'})
         res.status(200).json({result, token})
     } catch (error) {
+        console.log(error);
         res.status(500).json({message: 'Something went wrong'})
     }
 }

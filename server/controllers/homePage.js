@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 export const getHomePage = async (req, res) => {
     try{
         const postModel = await PostModel.find()
-
         res.status(200).json(postModel)
     } catch (error) {
         res.status(404).json({ message: error})

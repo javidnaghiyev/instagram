@@ -1,5 +1,6 @@
 import express from 'express';
 import { getHomePage, createPost, updatePost, deletePost, likePost, comment, deleteComment } from '../controllers/homePage.js';
+import { auth } from '../middleware/auth.js'
 
 const router = express.Router()
 
