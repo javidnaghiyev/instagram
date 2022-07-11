@@ -20,6 +20,10 @@ const CreatePost = () => {
     const dispatch = useDispatch()
     const currentID = useSelector((state) => state.postID)
     const post = useSelector((state) => currentID ? state.posts.find((p) => p._id === currentID) : null)
+    const user = JSON.parse(localStorage.getItem('profile'))
+    console.log(user);
+    const result = user.result
+    const username = result ? result.firstName + result.lastName || result.given_name + result.family_name : null
 
     //Opening and Closing the component
     const handleClickAway = () => {
@@ -38,7 +42,7 @@ const CreatePost = () => {
 
 
     //Sending the post to redux
-    const [postData, setPostData] = useState({author: '', image: '', location: '', title: ''})
+    const [postData, setPostData] = useState({author: username, image: '', location: '', title: ''})
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -102,9 +106,9 @@ console.log(postData);
                                             <Container sx={{margin: '10px 0'}}>
                                                 <Box component='div' sx={classes.ppHolder}>
                                                     <Box component='div' sx={classes.border}></Box>
-                                                    <img src='https://i1.rgstatic.net/ii/profile.image/1018933272395776-1619944031326_Q512/Javid-Naghiyev-2.jpg' />
+                                                    <img src={result.picture || result.firstName.charAt(0)} />
                                                 </Box>
-                                                <Typography sx={{display:'inline-block'}}>cavidnagiyev</Typography>
+                                                <Typography sx={{display:'inline-block'}}>{username.toLowerCase()}</Typography>
                                             </Container>
                                             <Container sx={classes.nameContainer}>
                                                 <TextField 

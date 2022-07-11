@@ -43,7 +43,7 @@ const Auth = () => {
   const googleSuccess = async (res) => {
     const profileObj = jwt_decode(res ? res.credential : undefined)
     const result = (({ given_name, family_name, email, picture }) => ({ given_name, family_name, email, picture }))(profileObj)
-    const token = profileObj ? profileObj.jti : undefined
+    const token = res.credential
 
     try {
       dispatch({ type: 'AUTH', data: { result, token}})

@@ -7,12 +7,12 @@ const auth = async (req, res, next) => {
 
         let decodedData;
 
-        if(token && isCustomAuth){
+        if(isCustomAuth){
             decodedData = jwt.verify(token, process.env.SECRET);
-            req.userId = decodedData && decodedData.id
+            req.userId = decodedData ? decodedData.id : null
         } else{
             decodedData = jwt.decode(token)
-            req.userId = decodedData && decodedData.sub
+            req.userId = decodedData ? decodedData.sub : null
         }
         next()
     } catch (error) {

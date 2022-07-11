@@ -23,6 +23,9 @@ const Post = () => {
     const posts = useSelector((state) => state.posts)
     const dispatch = useDispatch()
     const postID = useSelector((state) => state.postID)
+
+    const user = JSON.parse(localStorage.getItem('profile'))
+
     // post id
     const [currentID, setCurrentID] = useState(null)
     function RsendPostID(id) {
@@ -83,7 +86,7 @@ const Post = () => {
                                             <img src={post.profilePicture} />
                                         </Box>
                                         <Box>
-                                            <Typography sx={classes.accountName}>audi</Typography>
+                                            <Typography sx={classes.accountName}>{post.author}</Typography>
                                             <Typography sx={classes.location}>{post.location}</Typography>
                                         </Box>
                                         <MoreHorizIcon sx={{position: 'absolute', right: '10px'}}
