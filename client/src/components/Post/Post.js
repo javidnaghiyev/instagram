@@ -63,11 +63,16 @@ const Post = () => {
 
 
     //comment
-    const [commentData, setCommentData] = useState({comment: ""})
+    const [commentData, setCommentData] = useState({comment: ''})
     const [commentIndex, setCommentIndex] = useState(null)
 
     const commentPost = () => {
         dispatch(comment(currentID, commentData))
+    }
+
+    //delete comment
+    const deleteCommentDispatch = (postId, commentId) => {
+        dispatch(deleteComment(postId, commentId))
     }
 
 
@@ -128,17 +133,20 @@ const Post = () => {
                                     </Box>
                                 </Box>
                                 <Box sx={classes.postBottom}>
-                                    <Typography>{post.likeCount} likes</Typography>
+                                    <Typography>{post.likes.length} likes</Typography>
                                     <Typography display='inline' marginRight='5px'>audi</Typography>
                                     <Typography variant='body2' display='inline' fontWeight='300'>{post.title}</Typography>
                                     <Box sx={classes.commentHolder}>
                                         {post.comments.map(comment => {
                                             return <>
                                             <Box position='relative'>
-                                                <Typography>
-                                                    {comment}
+                                                <Typography variant='body1'>
+                                                    {comment.author}
                                                 </Typography>
-                                                <DeleteIcon onClick={() => dispatch(deleteComment(post._id, comment))} sx={{position: 'absolute', right: '0', zIndex: '5'}} fontSize='sm'></DeleteIcon>
+                                                <Typography variant='body2'>
+                                                    {comment.comment}
+                                                </Typography>
+                                                <DeleteIcon onClick={() => deleteCommentDispatch(post._id, comment.comment)} sx={{position: 'absolute', right: '0', zIndex: '5'}} fontSize='sm'></DeleteIcon>
                                             </Box>
                                             </>
                                         })}

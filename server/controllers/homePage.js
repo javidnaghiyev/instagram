@@ -1,4 +1,5 @@
 import PostModel from "../models/postModel.js";
+import UserModel from "../models/user.js";
 import mongoose from "mongoose";
 
 export const getHomePage = async (req, res) => {
@@ -46,33 +47,50 @@ export const deletePost = async (req, res) => {
 export const likePost = async (req, res) => {
     const { id: _id } = req.params
 
+    if(!req.userId) return res.json({ message: 'Unauthorized' })
+
     if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('We couldn\'t find this post')
-
+    
     const post = await PostModel.findById(_id)
-    const updatedPost = await PostModel.findByIdAndUpdate(_id, { likeCount: post.likeCount + 1}, { new: true })
+    const index = post.likes.findIndex((id) => id === String(req.userId))
+    
+    if(index === -1){
+        post.likes.push(req.userId)
+    }else{
+        post.likes = post.likes.filter((id) => id != String(req.userId))
+    }
 
-    res.json(updatedPost)
+    const updatedPost = await PostModel.findByIdAndUpdate(_id, post, { new: true })
+    console.log(post.likes);
+    res.json(updatePost)
 }
 
 export const comment = async (req, res) => {
     const { id: _id } = req.params
-    const comment = req.body
+    const {comment: data} = req.body
 
+    if(!req.userId) return res.json({ message: 'The user is not authorized' })
     if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('We couldn\'t find this post')
 
     const post = await PostModel.findById(_id)
-    const updatedComment = await PostModel.findByIdAndUpdate(_id, { $push: { comments: comment.comment} }, { new: true } )
+
+    const newComment = post.comments.push({comment: data, author: req.userId})
+
+    const updatedComment = await PostModel.findByIdAndUpdate(_id, post, { new: true } )
 
     res.json(updatedComment)
 }
 
 export const deleteComment = async (req, res) => {
-    const { id: _id, comment: comment } = req.params
+    const { postId, commentId } = req.params
 
-    if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('We couldn\'t find this post')
+    if(!req.userId) return res.json({ message: 'User is not authorize' })
+    if(!mongoose.Types.ObjectId.isValid(postId)) return res.status(404).send('We couldn\'t find this post')
 
-    const post = PostModel.findById(_id)
-    const deletedComment = await PostModel.findByIdAndUpdate(_id, { $pull: { comments: { $in: [`${comment}`]}}}, { new : true})
+    const post = await PostModel.findById(postId)
+    post.comments = post.comments.filter((comment) => comment.comment != commentId)
 
-    res.json(deletedComment)
+    const updatedPost = await PostModel.findByIdAndUpdate(postId, post, { new: true})
+
+    res.json(updatedPost)
 }
