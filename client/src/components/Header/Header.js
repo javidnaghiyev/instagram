@@ -15,6 +15,7 @@ import '../../images/IMG_20190905_161749.jpg';
 import { showCreateAction, hideCreateAction } from '../../actions/posts';
 import { useDispatch } from 'react-redux';
 import getPostID from '../../reducers/getPostID';
+import { getProfile } from '../../actions/user';
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -27,6 +28,7 @@ const Header = () => {
   }
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
+  const userId = user ? user.result._id : undefined
 
   useEffect(() => {
     const token = user ? user.token : undefined
@@ -53,6 +55,11 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleProfile = () => {
+    setAnchorEl(null);
+    dispatch(getProfile(userId))
+    navigate(`/user/${userId}`)
+  }
 
   return (
     <Container maxWidth='false' sx={classes.headerHolder}>
@@ -97,7 +104,7 @@ const Header = () => {
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleProfile}>Profile</MenuItem>
                   <MenuItem onClick={handleClose}>My account</MenuItem>
                   <MenuItem onClick={logout}>Logout</MenuItem>
                 </Menu>

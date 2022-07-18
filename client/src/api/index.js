@@ -20,3 +20,4 @@ export const deleteComment = (postId, commentId) => API.patch(`/${postId}/${comm
 
 export const signIn = (formData) => API.post(`/user/signin`, formData)
 export const signUp = (formData) => API.post(`/user/signup`, formData)
+export const getProfile = (id) => API.get(`/user/${id}`, getProfile)

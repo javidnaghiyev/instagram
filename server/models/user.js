@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
     lastName: {type: String, required: true},
     picture: String,
     bio: String,
+    posts: [Object],
     postCount: {
         type: Number,
         default: 0
