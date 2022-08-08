@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { globalClasses } from './globalStyles';
 import { useEffect } from 'react';
 import { getPosts, likePost } from './actions/posts'
+import { getProfile } from './actions/user.js';
 import Profile from './components/Profile/Profile.js';
 
 const App = () => {
@@ -18,6 +19,9 @@ const App = () => {
     dispatch(getPosts())
   }, [dispatch, currentID])
   
+  useEffect(() => {
+    dispatch(getProfile())
+  }, [])
 
   return (
     <>

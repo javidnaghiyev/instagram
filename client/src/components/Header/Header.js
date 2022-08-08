@@ -57,8 +57,7 @@ const Header = () => {
   };
   const handleProfile = () => {
     setAnchorEl(null);
-    dispatch(getProfile(userId))
-    navigate(`/user/${userId}`)
+    dispatch(getProfile(userId, navigate))
   }
 
   return (

@@ -1,10 +1,9 @@
-const userReducer = (userData = {}, action) => {
+export default (state = { userData: null }, action) => {
     switch (action.type) {
         case 'GET_USER':
-            return action ? action.data : null
+            state = {...state, userData: action ? action.payload : null}
+            return state
         default:
-            return userData;
+            return state;
     }
 }
-
-export default userReducer
